@@ -30,6 +30,7 @@ def identities():
     SELECT 
         i.identity_id,
         i.identity_name,
+        s.sinner_id,
         s.sinner_name AS sinner,
         i.rarity, i.season_released,
         GROUP_CONCAT(DISTINCT ia.affinity_name) AS affinities,
@@ -192,6 +193,7 @@ def egos():
         e.ego_name,
         e.class,
         e.season_released,
+        s.sinner_id,
         s.sinner_name AS sinner,
         GROUP_CONCAT(DISTINCT ea.affinity_name) AS affinities,
         GROUP_CONCAT(DISTINCT es.keyword_name) AS statuses
@@ -342,10 +344,10 @@ def edit_ego(id):
 @app.route("/report_identities")
 def report_identities():
     cursor.execute("""
-        SELECT s.sinner_name, COUNT(i.identity_id) AS total
+        SELECT s.sinner_id, s.sinner_name, COUNT(i.identity_id) AS total
         FROM Sinner s
         LEFT JOIN Identity i ON s.sinner_id = i.sinner_id
-        GROUP BY s.sinner_name
+        GROUP BY s.sinner_id, s.sinner_name
     """)
     data = cursor.fetchall()
     return render_template("report1.html", data=data)
@@ -464,14 +466,14 @@ def report_affinity():
 
     if aff:  # only run query if something selected
         cursor.execute("""
-            SELECT i.identity_name AS name, 'Identity' AS type
+            SELECT i.identity_id AS item_id, i.identity_name AS name, 'Identity' AS type
             FROM Identity i
             JOIN IdentityAffinity ia ON i.identity_id = ia.identity_id
             WHERE ia.affinity_name = %s
 
             UNION
 
-            SELECT e.ego_name AS name, 'EGO' AS type
+            SELECT e.ego_id AS item_id, e.ego_name AS name, 'EGO' AS type
             FROM EGO e
             JOIN EGOAffinity ea ON e.ego_id = ea.ego_id
             WHERE ea.affinity_name = %s

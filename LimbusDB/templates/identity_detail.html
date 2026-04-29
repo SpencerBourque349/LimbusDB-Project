@@ -1,11 +1,33 @@
-<h1>{{ i.identity_name }}</h1>
-
-<p><b>Sinner:</b> {{ i.sinner_name }}</p>
-<p><b>Rarity:</b> {{ i.rarity }}</p>
-<p><b>Season:</b> {{ i.season_released }}</p>
-<p><b>Acquisition:</b> {{ i.acquisition }}</p>
-
-<p><b>Affinities:</b> {{ i.affinities if i.affinities else "None" }}</p>
-<p><b>Status Effects:</b> {{ i.statuses if i.statuses else "None" }}</p>
-
-<a href="/identities">Back</a>
+<html>
+<head>
+	<title>Identity Detail</title>
+	<style>
+		body {
+			background-color: #29201F;
+			color: white;
+			text-align: center;
+			margin: 0;
+			font-family: Arial, sans-serif;
+		}
+		.banner {
+			background-color: #b01c37;
+			padding: 20px 0;
+			font-size: 2em;
+			font-weight: bold;
+			letter-spacing: 2px;
+		}
+		a { color: #fff; }
+	</style>
+</head>
+<body>
+	<div class="banner">Limbus Database</div>
+	<h1>{{ i.identity_name }}</h1>
+	<p><b>Sinner:</b> {{ i.sinner_name }}</p>
+	<p><b>Rarity:</b> {{ i.rarity }}</p>
+	<p><b>Season:</b> {{ i.season_released }}</p>
+	<p><b>Acquisition:</b> {{ i.acquisition }}</p>
+	<p><b>Affinities:</b> {{ i.affinities if i.affinities else "None" }}</p>
+	<p><b>Status Effects:</b> {{ i.statuses if i.statuses else "None" }}</p>
+	{% include 'nav_buttons.html' %}
+</body>
+</html>

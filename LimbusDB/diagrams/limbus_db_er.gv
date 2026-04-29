@@ -1,0 +1,46 @@
+// Graphviz DOT file for LimbusDB ER diagram
+// Render with: dot -Tpng limbus_db_er.gv -o limbus_db_er.png
+digraph LimbusDB_ER {
+  graph [rankdir=LR, fontsize=10];
+  node [shape=record, fontname="Helvetica"];
+
+  sinner [label="{sinner|<pk> sinner_id : PK\l+ sinner_name : UNIQUE\l gender\l height\l birthday\l native_district\l color\l literary_source\l}"];
+
+  ego [label="{ego|<pk> ego_id : PK\l ego_name\l sinner_id : FK\l class\l season_released\l acquisition\l}"];
+
+  identity [label="{identity|<pk> identity_id : PK\l identity_name\l sinner_id : FK\l rarity\l season_released\l acquisition\l}"];
+
+  affinity [label="{affinity|<pk> affinity_name : PK}"];
+
+  statuseffect [label="{statuseffect|<pk> keyword_name : PK}"];
+
+  egoaffinity [label="{egoaffinity|ego_id : FK\laffinity_name : FK\l(composite PK: ego_id, affinity_name)\l}"];
+
+  egostatuseffect [label="{egostatuseffect|ego_id : FK\lkeyword_name : FK\l(composite PK: ego_id, keyword_name)\l}"];
+
+  identityaffinity [label="{identityaffinity|identity_id : FK\laffinity_name : FK\l(composite PK: identity_id, affinity_name)\l}"];
+
+  identitystatuseffect [label="{identitystatuseffect|identity_id : FK\lkeyword_name : FK\l(composite PK: identity_id, keyword_name)\l}"];
+
+  // Relationships (foreign keys) with cardinalities (taillabel=source, headlabel=target)
+  // Convention: "1" = one, "N" = many. FK name remains in the middle.
+  ego -> sinner [label="sinner_id (FK)", headlabel="1", taillabel="N", labelfontsize=9, labeldistance=2.5, labelangle=30, arrowhead=none];
+  identity -> sinner [label="sinner_id (FK)", headlabel="1", taillabel="N", labelfontsize=9, labeldistance=2.5, labelangle=30, arrowhead=none];
+
+  // join (association) tables: many-to-one from join -> entity (so join side = N, entity = 1)
+  egoaffinity -> ego [label="ego_id (FK)", headlabel="1", taillabel="N", labelfontsize=9, labeldistance=2.5, labelangle=30, arrowhead=none];
+  egoaffinity -> affinity [label="affinity_name (FK)", headlabel="1", taillabel="N", labelfontsize=9, labeldistance=2.5, labelangle=30, arrowhead=none];
+
+  egostatuseffect -> ego [label="ego_id (FK)", headlabel="1", taillabel="N", labelfontsize=9, labeldistance=2.5, labelangle=30, arrowhead=none];
+  egostatuseffect -> statuseffect [label="keyword_name (FK)", headlabel="1", taillabel="N", labelfontsize=9, labeldistance=2.5, labelangle=30, arrowhead=none];
+
+  identityaffinity -> identity [label="identity_id (FK)", headlabel="1", taillabel="N", labelfontsize=9, labeldistance=2.5, labelangle=30, arrowhead=none];
+  identityaffinity -> affinity [label="affinity_name (FK)", headlabel="1", taillabel="N", labelfontsize=9, labeldistance=2.5, labelangle=30, arrowhead=none];
+
+  identitystatuseffect -> identity [label="identity_id (FK)", headlabel="1", taillabel="N", labelfontsize=9, labeldistance=2.5, labelangle=30, arrowhead=none];
+  identitystatuseffect -> statuseffect [label="keyword_name (FK)", headlabel="1", taillabel="N", labelfontsize=9, labeldistance=2.5, labelangle=30, arrowhead=none];
+
+  // Visual grouping hints
+  { rank=same; affinity; statuseffect }
+  { rank=same; egoaffinity; egostatuseffect; identityaffinity; identitystatuseffect }
+}

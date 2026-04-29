@@ -1,10 +1,36 @@
-<h1>Edit EGO</h1>
-
-<a href="/egos">Back</a><br><br>
-
 <form method="POST">
 
-    <!-- Name -->
+    <html>
+    <head>
+        <title>Edit Ego</title>
+        <style>
+            body {
+                background-color: #29201F;
+                color: white;
+                text-align: center;
+                margin: 0;
+                font-family: Arial, sans-serif;
+            }
+            .banner {
+                background-color: #b01c37;
+                padding: 20px 0;
+                font-size: 2em;
+                font-weight: bold;
+                letter-spacing: 2px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="banner">Limbus Database</div>
+        <h1>Edit Ego</h1>
+        {% include 'nav_buttons.html' %}
+        <form method="post">
+            <!-- form fields here -->
+        </form>
+    </body>
+    </html>
+    
+     <!-- Name -->
     Name:
     <input type="text" name="ego_name" value="{{ ego.ego_name }}"><br><br>
 

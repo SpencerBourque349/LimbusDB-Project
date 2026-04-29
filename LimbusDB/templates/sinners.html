@@ -1,21 +1,45 @@
-<h1>Sinners</h1>
-
-<a href="/<a href="/home">Home</a>">Home</a><br><br>
-
-<table border="1">
-<tr>
-    <th>Name</th>
-    <th>Gender</th>
-    <th>Height</th>
-    <th>Birthday</th>
-</tr>
-
-{% for s in sinners %}
-<tr>
-    <td><a href="/sinner/{{ s.sinner_id }}">{{ s.sinner_name }}</a></td>
-    <td>{{ s.gender }}</td>
-    <td>{{ s.height }}</td>
-    <td>{{ s.birthday }}</td>
-</tr>
-{% endfor %}
-</table>
+<html>
+<head>
+    <title>Sinners</title>
+    <style>
+        body {
+            background-color: #29201F;
+            color: white;
+            text-align: center;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .banner {
+            background-color: #b01c37;
+            padding: 20px 0;
+            font-size: 2em;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+        a { color: #fff; }
+        table { margin: 0 auto; color: white; }
+        th, td { padding: 8px; }
+    </style>
+</head>
+<body>
+    <div class="banner">Limbus Database</div>
+    <h1>Sinners</h1>
+    {% include 'nav_buttons.html' %}
+    <table border="1">
+    <tr>
+        <th>Name</th>
+        <th>Gender</th>
+        <th>Height</th>
+        <th>Birthday</th>
+    </tr>
+    {% for s in sinners %}
+    <tr>
+        <td><a href="/sinner/{{ s.sinner_id }}">{{ s.sinner_name }}</a></td>
+        <td>{{ s.gender }}</td>
+        <td>{{ s.height }}</td>
+        <td>{{ s.birthday }}</td>
+    </tr>
+    {% endfor %}
+    </table>
+</body>
+</html>

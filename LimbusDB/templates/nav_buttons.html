@@ -1,0 +1,46 @@
+<style>
+    .nav-links {
+        margin: 14px 0 18px;
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+    .nav-button {
+        display: inline-block;
+        padding: 8px 16px;
+        background-color: #444;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 6px;
+    }
+    .nav-button:hover {
+        background-color: #666;
+    }
+</style>
+<div class="nav-links">
+    <a href="{{ url_for('home') }}" class="nav-button" onclick="return LimbusNav.goBack(event, this);">Back</a>
+    <a href="{{ url_for('home') }}" class="nav-button">Home</a>
+</div>
+<script>
+window.LimbusNav = window.LimbusNav || {};
+window.LimbusNav.goBack = function (event, link) {
+    event.preventDefault();
+    const fallback = link.getAttribute("href") || "/home";
+    const previousPage = sessionStorage.getItem("limbus_previous_page");
+    if (previousPage && previousPage !== window.location.pathname + window.location.search + window.location.hash) {
+        window.location.href = previousPage;
+        return false;
+    }
+    window.location.href = fallback;
+    return false;
+};
+(function () {
+    const currentPage = window.location.pathname + window.location.search + window.location.hash;
+    const storedCurrentPage = sessionStorage.getItem("limbus_current_page");
+    if (storedCurrentPage && storedCurrentPage !== currentPage) {
+        sessionStorage.setItem("limbus_previous_page", storedCurrentPage);
+    }
+    sessionStorage.setItem("limbus_current_page", currentPage);
+})();
+</script>

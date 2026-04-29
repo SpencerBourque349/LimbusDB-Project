@@ -1,32 +1,50 @@
-<h1>Add EGO</h1>
-
-<form method="POST">
-    Name: <input type="text" name="ego_name"><br>
-
-    Sinner:
-    <select name="sinner_id">
-        {% for s in sinners %}
-        <option value="{{ s.sinner_id }}">{{ s.sinner_name }}</option>
+29201F<html>
+<head>
+    <title>Add EGO</title>
+    <style>
+        body {
+            background-color: #29201F;
+            color: white;
+            text-align: center;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .banner {
+            background-color: #b01c37;
+            padding: 20px 0;
+            font-size: 2em;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+        a { color: #fff; }
+    </style>
+</head>
+<body>
+    <div class="banner">Limbus Database</div>
+    <h1>Add EGO</h1>
+    <form method="POST">
+        Name: <input type="text" name="ego_name"><br>
+        Sinner:
+        <select name="sinner_id">
+            {% for s in sinners %}
+            <option value="{{ s.sinner_id }}">{{ s.sinner_name }}</option>
+            {% endfor %}
+        </select><br>
+        <h3>Affinities</h3>
+        {% for a in affinities %}
+            <input type="checkbox" name="affinities" value="{{ a.affinity_name }}">
+            {{ a.affinity_name }}<br>
         {% endfor %}
-    </select><br>
-	
-	<h3>Affinities</h3>
-{% for a in affinities %}
-    <input type="checkbox" name="affinities" value="{{ a.affinity_name }}">
-    {{ a.affinity_name }}<br>
-{% endfor %}
-
-<h3>Status Effects</h3>
-{% for s in statuses %}
-    <input type="checkbox" name="statuses" value="{{ s.keyword_name }}">
-    {{ s.keyword_name }}<br>
-{% endfor %}
-
-    Class: <input type="text" name="class"><br>
-    Season: <input type="text" name="season_released"><br>
-    Acquisition: <input type="text" name="acquisition"><br>
-
-    <input type="submit">
-</form>
-
-<a href="/home">Home</a>
+        <h3>Status Effects</h3>
+        {% for s in statuses %}
+            <input type="checkbox" name="statuses" value="{{ s.keyword_name }}">
+            {{ s.keyword_name }}<br>
+        {% endfor %}
+        Class: <input type="text" name="class"><br>
+        Season: <input type="text" name="season_released"><br>
+        Acquisition: <input type="text" name="acquisition"><br>
+        <input type="submit">
+    </form>
+    <a href="/home">Home</a>
+</body>
+</html>

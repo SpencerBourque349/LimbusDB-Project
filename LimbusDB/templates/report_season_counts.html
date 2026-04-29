@@ -1,21 +1,43 @@
-<h1>IDs + EGOs per Season</h1>
-
-<canvas id="myChart"></canvas>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<script>
-const labels = [{% for row in data %}"{{ row.season_released }}",{% endfor %}];
-const values = [{% for row in data %}{{ row.total }},{% endfor %}];
-
-new Chart(document.getElementById('myChart'), {
-    type: 'bar',
-    data: {
-        labels: labels,
-        datasets: [{
-            label: 'Total IDs + EGOs',
-            data: values
-        }]
-    }
-});
-</script>
+<html>
+<head>
+    <title>IDs + EGOs per Season</title>
+    <style>
+        body {
+            background-color: #29201F;
+            color: white;
+            text-align: center;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .banner {
+            background-color: #b01c37;
+            padding: 20px 0;
+            font-size: 2em;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+        a { color: #fff; }
+    </style>
+</head>
+<body>
+    <div class="banner">Limbus Database</div>
+    <h1>IDs + EGOs per Season</h1>
+    {% include 'nav_buttons.html' %}
+    <canvas id="myChart"></canvas>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+    const labels = [{% for row in data %}"{{ row.season_released }}",{% endfor %}];
+    const values = [{% for row in data %}{{ row.total }},{% endfor %}];
+    new Chart(document.getElementById('myChart'), {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Total IDs + EGOs',
+                data: values
+            }]
+        }
+    });
+    </script>
+</body>
+</html>

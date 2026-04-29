@@ -1,42 +1,61 @@
-<h1>Affinity Report</h1>
-
-<a href="/home">Home</a><br><br>
-
-<!-- Dropdown Form -->
-<form method="GET">
-    <label>Select Affinity:</label>
-    <select name="aff">
-        {% for a in affinities %}
-        <option value="{{ a.affinity_name }}"
-            {% if aff == a.affinity_name %} selected {% endif %}>
-            {{ a.affinity_name }}
-        </option>
+<html>
+<head>
+    <title>Affinity Report</title>
+    <style>
+        body {
+            background-color: #29201F;
+            color: white;
+            text-align: center;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .banner {
+            background-color: #b01c37;
+            padding: 20px 0;
+            font-size: 2em;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+        a { color: #fff; }
+        table { margin: 0 auto; color: white; }
+        th, td { padding: 8px; }
+    </style>
+</head>
+<body>
+    <div class="banner">Limbus Database</div>
+    <h1>Affinity Report</h1>
+    {% include 'nav_buttons.html' %}
+    <!-- Dropdown Form -->
+    <form method="GET">
+        <label>Select Affinity:</label>
+        <select name="aff">
+            {% for a in affinities %}
+            <option value="{{ a.affinity_name }}" {% if aff == a.affinity_name %} selected {% endif %}>{{ a.affinity_name }}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="Search">
+    </form>
+    <br>
+    {% if aff %}
+    <h2>Results for: {{ aff }}</h2>
+    <table border="1">
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+        </tr>
+        {% for row in data %}
+        <tr>
+            <td>
+                {% if row.type == 'Identity' %}
+                <a href="{{ url_for('identity_detail', id=row.item_id) }}">{{ row.name }}</a>
+                {% else %}
+                <a href="{{ url_for('ego_detail', id=row.item_id) }}">{{ row.name }}</a>
+                {% endif %}
+            </td>
+            <td>{{ row.type }}</td>
+        </tr>
         {% endfor %}
-    </select>
-
-    <input type="submit" value="Search">
-</form>
-
-<br>
-
-{% if aff %}
-<h2>Results for: {{ aff }}</h2>
-
-<table border="1">
-<tr>
-    <th>Name</th>
-    <th>Type</th>
-</tr>
-
-{% for row in data %}
-<tr>
-    <td>{{ row.name }}</td>
-    <td>{{ row.type }}</td>
-</tr>
-{% endfor %}
-
-</table>
-
-{% elif aff is not none %}
+    </table>
+    {% elif aff is not none %}
 <p>No results found.</p>
 {% endif %}

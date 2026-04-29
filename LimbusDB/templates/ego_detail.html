@@ -1,11 +1,33 @@
-<h1>{{ e.ego_name }}</h1>
-
-<p><b>Sinner:</b> {{ e.sinner_name }}</p>
-<p><b>Class:</b> {{ e.class }}</p>
-<p><b>Season:</b> {{ e.season_released }}</p>
-<p><b>Acquisition:</b> {{ e.acquisition }}</p>
-
-<p><b>Affinities:</b> {{ e.affinities if e.affinities else "None" }}</p>
-<p><b>Status Effects:</b> {{ e.statuses if e.statuses else "None" }}</p>
-
-<a href="/egos">Back</a>
+<html>
+<head>
+	<title>EGO Detail</title>
+	<style>
+		body {
+			background-color: #29201F;
+			color: white;
+			text-align: center;
+			margin: 0;
+			font-family: Arial, sans-serif;
+		}
+		.banner {
+			background-color: #b01c37;
+			padding: 20px 0;
+			font-size: 2em;
+			font-weight: bold;
+			letter-spacing: 2px;
+		}
+		a { color: #fff; }
+	</style>
+</head>
+<body>
+	<div class="banner">Limbus Database</div>
+	<h1>{{ e.ego_name }}</h1>
+	<p><b>Sinner:</b> {{ e.sinner_name }}</p>
+	<p><b>Class:</b> {{ e.class }}</p>
+	<p><b>Season:</b> {{ e.season_released }}</p>
+	<p><b>Acquisition:</b> {{ e.acquisition }}</p>
+	<p><b>Affinities:</b> {{ e.affinities if e.affinities else "None" }}</p>
+	<p><b>Status Effects:</b> {{ e.statuses if e.statuses else "None" }}</p>
+	{% include 'nav_buttons.html' %}
+</body>
+</html>
