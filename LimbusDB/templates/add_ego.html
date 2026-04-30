@@ -16,6 +16,24 @@
             font-weight: bold;
             letter-spacing: 2px;
         }
+        .nav-links {
+            margin: 14px 0 18px;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .nav-button {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #444;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+        .nav-button:hover {
+            background-color: #666;
+        }
         a { color: #fff; }
     </style>
 </head>
@@ -45,6 +63,8 @@
         Acquisition: <input type="text" name="acquisition"><br>
         <input type="submit">
     </form>
-    <a href="/home">Home</a>
+    <div class="nav-links">
+        <a href="/home" class="nav-button">Home</a>
+    </div>
 </body>
 </html>

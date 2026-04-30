@@ -32,5 +32,12 @@
 	<a href="/report_identities">Identities per Sinner</a><br>
 	<a href="/report_season_counts">Identities and EGOs per Season</a><br>
 	<a href="/report_affinity">Affinity Filter</a><br>
+	<script>
+	(function () {
+		const currentPage = window.location.pathname + window.location.search + window.location.hash;
+		sessionStorage.setItem("limbus_nav_stack", JSON.stringify([currentPage]));
+		sessionStorage.setItem("limbus_nav_skip_referrer_once", "1");
+	})();
+	</script>
 </body>
 </html>

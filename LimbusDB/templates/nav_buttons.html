@@ -20,27 +20,78 @@
 </style>
 <div class="nav-links">
     <a href="{{ url_for('home') }}" class="nav-button" onclick="return LimbusNav.goBack(event, this);">Back</a>
-    <a href="{{ url_for('home') }}" class="nav-button">Home</a>
+    <a href="{{ url_for('home') }}" class="nav-button" onclick="return LimbusNav.goHome(event, this);">Home</a>
 </div>
 <script>
 window.LimbusNav = window.LimbusNav || {};
 window.LimbusNav.goBack = function (event, link) {
     event.preventDefault();
     const fallback = link.getAttribute("href") || "/home";
-    const previousPage = sessionStorage.getItem("limbus_previous_page");
-    if (previousPage && previousPage !== window.location.pathname + window.location.search + window.location.hash) {
+    const currentPage = window.location.pathname + window.location.search + window.location.hash;
+    const stackKey = "limbus_nav_stack";
+    const skipReferrerKey = "limbus_nav_skip_referrer_once";
+    const stack = JSON.parse(sessionStorage.getItem(stackKey) || "[]");
+
+    // Trim current page from the stack (if present), then go to previous entry.
+    if (stack.length && stack[stack.length - 1] === currentPage) {
+        stack.pop();
+    }
+
+    const previousPage = stack.pop();
+    sessionStorage.setItem(stackKey, JSON.stringify(stack));
+
+    if (previousPage && previousPage !== currentPage) {
+        sessionStorage.setItem(skipReferrerKey, "1");
         window.location.href = previousPage;
         return false;
     }
+
+    sessionStorage.setItem(skipReferrerKey, "1");
     window.location.href = fallback;
+    return false;
+};
+window.LimbusNav.goHome = function (event, link) {
+    event.preventDefault();
+    const homePath = link.getAttribute("href") || "/home";
+    const stackKey = "limbus_nav_stack";
+    const skipReferrerKey = "limbus_nav_skip_referrer_once";
+
+    // Home starts a fresh navigation session.
+    sessionStorage.setItem(stackKey, JSON.stringify([homePath]));
+    sessionStorage.setItem(skipReferrerKey, "1");
+    window.location.href = homePath;
     return false;
 };
 (function () {
     const currentPage = window.location.pathname + window.location.search + window.location.hash;
-    const storedCurrentPage = sessionStorage.getItem("limbus_current_page");
-    if (storedCurrentPage && storedCurrentPage !== currentPage) {
-        sessionStorage.setItem("limbus_previous_page", storedCurrentPage);
+    const stackKey = "limbus_nav_stack";
+    const skipReferrerKey = "limbus_nav_skip_referrer_once";
+    const stack = JSON.parse(sessionStorage.getItem(stackKey) || "[]");
+    const referrer = document.referrer;
+    const shouldSkipReferrer = sessionStorage.getItem(skipReferrerKey) === "1";
+
+    if (shouldSkipReferrer) {
+        sessionStorage.removeItem(skipReferrerKey);
     }
-    sessionStorage.setItem("limbus_current_page", currentPage);
+
+    if (!shouldSkipReferrer && referrer) {
+        try {
+            const refUrl = new URL(referrer);
+            if (refUrl.origin === window.location.origin) {
+                const refPage = refUrl.pathname + refUrl.search + refUrl.hash;
+                if (refPage !== currentPage && (!stack.length || stack[stack.length - 1] !== refPage)) {
+                    stack.push(refPage);
+                }
+            }
+        } catch (error) {
+            // Ignore malformed referrer values.
+        }
+    }
+
+    // Keep a unique sequential trail for in-app back navigation.
+    if (!stack.length || stack[stack.length - 1] !== currentPage) {
+        stack.push(currentPage);
+        sessionStorage.setItem(stackKey, JSON.stringify(stack));
+    }
 })();
 </script>

@@ -1,8 +1,19 @@
 // Graphviz DOT file for LimbusDB ER diagram
 // Render with: dot -Tpng limbus_db_er.gv -o limbus_db_er.png
 digraph LimbusDB_ER {
-  graph [rankdir=LR, fontsize=10];
-  node [shape=record, fontname="Helvetica"];
+  graph [
+    rankdir=LR,
+    fontsize=11,
+    fontname="Helvetica",
+    overlap=false,
+    splines=polyline,
+    nodesep=0.9,
+    ranksep=1.1,
+    pad="0.55,0.45",
+    margin="0.2,0.2"
+  ];
+  node [shape=record, fontname="Helvetica", fontsize=10, margin="0.08,0.06"];
+  edge [fontname="Helvetica", fontsize=9, arrowsize=0.7, color="#4b5563"];
 
   sinner [label="{sinner|<pk> sinner_id : PK\l+ sinner_name : UNIQUE\l gender\l height\l birthday\l native_district\l color\l literary_source\l}"];
 
@@ -22,23 +33,23 @@ digraph LimbusDB_ER {
 
   identitystatuseffect [label="{identitystatuseffect|identity_id : FK\lkeyword_name : FK\l(composite PK: identity_id, keyword_name)\l}"];
 
-  // Relationships (foreign keys) with cardinalities (taillabel=source, headlabel=target)
-  // Convention: "1" = one, "N" = many. FK name remains in the middle.
-  ego -> sinner [label="sinner_id (FK)", headlabel="1", taillabel="N", labelfontsize=9, labeldistance=2.5, labelangle=30, arrowhead=none];
-  identity -> sinner [label="sinner_id (FK)", headlabel="1", taillabel="N", labelfontsize=9, labeldistance=2.5, labelangle=30, arrowhead=none];
+  // Relationships (foreign keys).
+  // Cardinality is included in each edge label as (N:1).
+  ego -> sinner [label="sinner_id (FK, N:1)", arrowhead=none];
+  identity -> sinner [label="sinner_id (FK, N:1)", arrowhead=none];
 
-  // join (association) tables: many-to-one from join -> entity (so join side = N, entity = 1)
-  egoaffinity -> ego [label="ego_id (FK)", headlabel="1", taillabel="N", labelfontsize=9, labeldistance=2.5, labelangle=30, arrowhead=none];
-  egoaffinity -> affinity [label="affinity_name (FK)", headlabel="1", taillabel="N", labelfontsize=9, labeldistance=2.5, labelangle=30, arrowhead=none];
+  // Join tables map many rows to one parent row (N:1).
+  egoaffinity -> ego [label="ego_id (FK, N:1)", arrowhead=none];
+  egoaffinity -> affinity [label="affinity_name (FK, N:1)", arrowhead=none];
 
-  egostatuseffect -> ego [label="ego_id (FK)", headlabel="1", taillabel="N", labelfontsize=9, labeldistance=2.5, labelangle=30, arrowhead=none];
-  egostatuseffect -> statuseffect [label="keyword_name (FK)", headlabel="1", taillabel="N", labelfontsize=9, labeldistance=2.5, labelangle=30, arrowhead=none];
+  egostatuseffect -> ego [label="ego_id (FK, N:1)", arrowhead=none];
+  egostatuseffect -> statuseffect [label="keyword_name (FK, N:1)", arrowhead=none];
 
-  identityaffinity -> identity [label="identity_id (FK)", headlabel="1", taillabel="N", labelfontsize=9, labeldistance=2.5, labelangle=30, arrowhead=none];
-  identityaffinity -> affinity [label="affinity_name (FK)", headlabel="1", taillabel="N", labelfontsize=9, labeldistance=2.5, labelangle=30, arrowhead=none];
+  identityaffinity -> identity [label="identity_id (FK, N:1)", arrowhead=none];
+  identityaffinity -> affinity [label="affinity_name (FK, N:1)", arrowhead=none];
 
-  identitystatuseffect -> identity [label="identity_id (FK)", headlabel="1", taillabel="N", labelfontsize=9, labeldistance=2.5, labelangle=30, arrowhead=none];
-  identitystatuseffect -> statuseffect [label="keyword_name (FK)", headlabel="1", taillabel="N", labelfontsize=9, labeldistance=2.5, labelangle=30, arrowhead=none];
+  identitystatuseffect -> identity [label="identity_id (FK, N:1)", arrowhead=none];
+  identitystatuseffect -> statuseffect [label="keyword_name (FK, N:1)", arrowhead=none];
 
   // Visual grouping hints
   { rank=same; affinity; statuseffect }
