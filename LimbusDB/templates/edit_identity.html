@@ -1,34 +1,34 @@
-<form method="POST">
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Identity</title>
+    <style>
+        body {
+            background-color: #29201F;
+            color: white;
+            text-align: center;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .banner {
+            background-color: #b01c37;
+            padding: 20px 0;
+            font-size: 2em;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
 
-    <html>
-    <head>
-        <title>Edit Identity</title>
-        <style>
-            body {
-                background-color: #29201F;
-                color: white;
-                text-align: center;
-                margin: 0;
-                font-family: Arial, sans-serif;
-            }
-            .banner {
-                background-color: #b01c37;
-                padding: 20px 0;
-                font-size: 2em;
-                font-weight: bold;
-                letter-spacing: 2px;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="banner">Limbus Database</div>
-        <h1>Edit Identity</h1>
-        {% include 'nav_buttons.html' %}
-        <form method="post">
-            <!-- form fields here -->
-        </form>
-    </body>
-    </html>
+<body>
+
+<div class="banner">Limbus Database</div>
+<h1>Edit Identity</h1>
+
+{% include 'nav_buttons.html' %}
+
+<!-- ✅ ONLY ONE FORM -->
+<form method="POST">
 
     <!-- Name -->
     Name:
@@ -67,7 +67,8 @@
         {{ a.affinity_name }}<br>
     {% endfor %}
 
-    <br>    
+    <br>
+
     <!-- Status Effects -->
     <h3>Status Effects</h3>
     {% for s in statuses %}
@@ -81,3 +82,6 @@
     <input type="submit" value="Update Identity">
 
 </form>
+
+</body>
+</html>
