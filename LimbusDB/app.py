@@ -3,22 +3,23 @@ import mysql.connector
 
 app = Flask(__name__)
 
-# Connect to your XAMPP MySQL
+# databse connection
 db = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="",   # default for XAMPP
+    password="",
     database="limbus_db"
 )
 
 cursor = db.cursor(dictionary=True)
 
-# Homepage
+# Landing page
 
 @app.route("/")
 def landing():
     return render_template("landing.html")
     
+# homepage
 @app.route("/home")
 def home():
     return render_template("home.html")
@@ -67,14 +68,14 @@ def add_identity():
 
         identity_id = cursor.lastrowid  # IMPORTANT
 
-        # Insert affinities
+        # insert affinities
         for aff in affinities:
             cursor.execute("""
                 INSERT INTO IdentityAffinity (identity_id, affinity_name)
                 VALUES (%s, %s)
             """, (identity_id, aff))
 
-        # Insert statuses
+        # insert statuses
         for stat in statuses:
             cursor.execute("""
                 INSERT INTO IdentityStatusEffect (identity_id, keyword_name)
@@ -84,7 +85,7 @@ def add_identity():
         db.commit()
         return redirect("/identities")
 
-    # GET request → load dropdown/checkbox data
+    # get request
     cursor.execute("SELECT * FROM Sinner")
     sinners = cursor.fetchall()
 
@@ -108,7 +109,7 @@ def delete_identity(id):
     db.commit()
     return redirect("/identities")
     
-    #edit Identity
+# edit Identity
 @app.route("/edit_identity/<int:id>", methods=["GET", "POST"])
 def edit_identity(id):
 
@@ -151,7 +152,7 @@ def edit_identity(id):
         db.commit()
         return redirect("/identities")
 
-    # ===== GET REQUEST =====
+    # get request
 
     # Identity info
     cursor.execute("SELECT * FROM Identity WHERE identity_id=%s", (id,))
@@ -228,7 +229,7 @@ def add_ego():
 
         db.commit()
 
-        ego_id = cursor.lastrowid  # IMPORTANT
+        ego_id = cursor.lastrowid
 
         # Insert affinities
         for aff in affinities:
@@ -247,7 +248,7 @@ def add_ego():
         db.commit()
         return redirect("/egos")
 
-    # GET request → load dropdown/checkbox data
+    # get request
     cursor.execute("SELECT * FROM Sinner")
     sinners = cursor.fetchall()
 
@@ -271,7 +272,7 @@ def delete_ego(id):
     db.commit()
     return redirect("/egos")    
     
-    
+    # edit ego
 @app.route("/edit_ego/<int:id>", methods=["GET", "POST"])
 def edit_ego(id):
 
@@ -312,7 +313,7 @@ def edit_ego(id):
         db.commit()
         return redirect("/egos")
 
-    # GET
+    # get request
     cursor.execute("SELECT * FROM EGO WHERE ego_id=%s", (id,))
     ego = cursor.fetchone()
 
@@ -340,7 +341,7 @@ def edit_ego(id):
         current_aff=current_aff,
         current_stat=current_stat
     )
-
+ # report of number of identities per sinner
 @app.route("/report_identities")
 def report_identities():
     cursor.execute("""
@@ -352,7 +353,7 @@ def report_identities():
     data = cursor.fetchall()
     return render_template("report1.html", data=data)
     
- # ID details  
+ # Identity details  
 @app.route("/identity/<int:id>")
 def identity_detail(id):
     cursor.execute("""
@@ -371,14 +372,14 @@ def identity_detail(id):
 
     identity = cursor.fetchone()
     return render_template("identity_detail.html", i=identity)
-
+#sinner page
 @app.route("/sinners")
 def sinners():
     cursor.execute("SELECT * FROM Sinner")
     data = cursor.fetchall()
     return render_template("sinners.html", sinners=data)
     
-    
+ # ego details   
 @app.route("/egos/<int:id>")
 def ego_detail(id):
     cursor.execute("""
@@ -397,11 +398,11 @@ def ego_detail(id):
 
     ego = cursor.fetchone()
     return render_template("ego_detail.html", e=ego)
-    
+  # sinner details  
 @app.route("/sinner/<int:id>")
 def sinner_detail(id):
 
-    # Get sinner info
+    # get sinner info
     cursor.execute("""
         SELECT *
         FROM Sinner
@@ -409,7 +410,7 @@ def sinner_detail(id):
     """, (id,))
     sinner = cursor.fetchone()
 
-    # Get identities for this sinner
+    # get identities for this sinner
     cursor.execute("""
         SELECT 
             i.identity_id,
@@ -421,7 +422,7 @@ def sinner_detail(id):
     """, (id,))
     identities = cursor.fetchall()
 
-    # Get EGOs for this sinner
+    # get egos for this sinner
     cursor.execute("""
         SELECT 
             e.ego_id,
@@ -440,7 +441,7 @@ def sinner_detail(id):
         egos=egos
     )
     
-    
+# report of number of identities and egos released per season    
 @app.route("/report_season_counts")
 def report_season_counts():
     cursor.execute("""
@@ -458,6 +459,7 @@ def report_season_counts():
 
 from flask import request
 
+#report where user chooses and affinity and outputs all identities and egos with that affinity
 @app.route("/report_affinity", methods=["GET"])
 def report_affinity():
     aff = request.args.get("aff")
